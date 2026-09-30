@@ -1,0 +1,102 @@
+// Prisma Schema for Gym Holic, The Fitness Club
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite" // Easily switch to "postgresql" with DATABASE_URL in .env
+  url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id            String   @id @default(uuid())
+  name          String
+  phone         String
+  email         String?
+  goal          String
+  source        String   // 'membership', 'free_trial', 'diet_plan', 'consultation', 'contact'
+  planInterest  String?
+  bmiScore      Float?
+  bmiCategory   String?
+  bodyFat       Float?
+  caloriesDaily Int?
+  notes         String?
+  status        String   @default("NEW") // NEW, CONTACTED, CONVERTED, ARCHIVED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CrowdStatus {
+  id               String   @id @default("current")
+  level            String   // 'LOW', 'MODERATE', 'HIGH'
+  currentOccupancy Int      @default(35)
+  maxCapacity      Int      @default(110)
+  percentage       Int      @default(32)
+  bestTimeToVisit  String   @default("11:00 AM - 4:00 PM")
+  peakHours        String   @default("6:30 AM - 9:00 AM & 6:00 PM - 8:30 PM")
+  statusMessage    String   @default("Normal workout pace. Good availability of benches.")
+  updatedAt        DateTime @default(now()) @updatedAt
+}
+
+model MembershipPlan {
+  id                 String   @id @default(uuid())
+  name               String
+  duration           String
+  durationMonths     Int
+  priceINR           Int
+  originalPriceINR   Int
+  discountPercentage Int
+  isPopular          Boolean  @default(false)
+  badge              String?
+  description        String
+  features           String   // JSON stringified array of features
+  createdAt          DateTime @default(now())
+}
+
+model AffiliateProduct {
+  id                String   @id @default(uuid())
+  title             String
+  brand             String
+  category          String
+  priceINR          Int
+  originalPriceINR  Int
+  rating            Float
+  reviewsCount      Int
+  image             String
+  affiliateUrl      String
+  platform          String   // 'Amazon', 'Flipkart', 'HealthKart'
+  isBestSeller      Boolean  @default(false)
+  proteinPerServing String?
+  servings          Int?
+  weight            String?
+  highlight         String?
+  createdAt         DateTime @default(now())
+}
+
+model Consultation {
+  id                String   @id @default(uuid())
+  name              String
+  phone             String
+  email             String?
+  serviceType       String   // 'Nutrition', 'Personal Training', 'Fitness Assessment'
+  preferredDate     String
+  preferredTimeSlot String
+  notes             String?
+  status            String   @default("PENDING")
+  createdAt         DateTime @default(now())
+}
+
+model BlogPost {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  category    String
+  excerpt     String
+  content     String
+  readTime    String
+  coverImage  String
+  authorName  String
+  authorRole  String
+  publishedAt DateTime @default(now())
+}
