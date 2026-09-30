@@ -27,6 +27,7 @@ import { Lead, CrowdStatus, MembershipPlan, AffiliateProduct } from '@/types';
 import { INITIAL_CROWD_STATUS, INITIAL_MEMBERSHIP_PLANS, INITIAL_AFFILIATE_PRODUCTS } from '@/lib/seed-data';
 import { formatINR } from '@/lib/utils';
 import { GYM_DETAILS } from '@/lib/constants';
+import AdminPricingManager from '@/app/admin/page';
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -444,7 +445,7 @@ export default function AdminDashboard() {
                 type="button"
                 onClick={handleSaveCrowd}
                 disabled={isSavingCrowd}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black font-extrabold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/25 transition-all"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black font-extrabold text-xs flex items-center gap-2 shadow-lg shadow-amber-400/20 disabled:opacity-50"
               >
                 <Save className="w-4 h-4 text-black" />
                 <span>{isSavingCrowd ? 'Saving Changes...' : 'Save & Publish Live Status'}</span>
@@ -594,34 +595,10 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* TAB 4: MEMBERSHIP PLANS */}
+        {/* TAB 4: MEMBERSHIP PLANS - DYNAMIC PRICING MANAGER */}
         {activeTab === 'plans' && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-black text-white">Active Membership Packages</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {plans.map((p) => (
-                <div key={p.id} className="p-5 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-bold text-white text-base">{p.name}</h4>
-                      <p className="text-xs text-zinc-400">{p.duration}</p>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xl font-black text-amber-400">{formatINR(p.priceINR)}</span>
-                      <span className="text-xs text-zinc-500 line-through block">{formatINR(p.originalPriceINR)}</span>
-                    </div>
-                  </div>
-                  <ul className="text-xs text-zinc-300 space-y-1">
-                    {p.features.slice(0, 4).map((f, idx) => (
-                      <li key={idx} className="flex items-center gap-2">
-                        <CheckCircle className="w-3 h-3 text-amber-400" />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+          <div>
+            <AdminPricingManager />
           </div>
         )}
 
